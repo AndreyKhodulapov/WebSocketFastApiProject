@@ -6,6 +6,8 @@ from users.auth import get_password_hash, authenticate_user, create_access_token
 from users.dao import UsersDAO
 from users.schemas import SUserRegister, SUserAuth
 from fastapi.templating import Jinja2Templates
+from typing import List
+from users.schemas import SUserRead
 
 
 templates = Jinja2Templates(directory='templates')
@@ -50,3 +52,10 @@ async def logout_user(response: Response):
 @router.get("/", response_class=HTMLResponse, summary="Страница авторизации")
 async def get_categories(request: Request):
     return templates.TemplateResponse("auth.html", {"request": request})
+
+
+@router.get("/users", response_model=List[SUserRead])
+async def get_users():
+    users_all = await UsersDAO.find_all()
+    # Используем генераторное выражение для создания списка
+    return [{'id': user.id, 'name': user.name} for user in users_all]
