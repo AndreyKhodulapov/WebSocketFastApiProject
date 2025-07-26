@@ -59,6 +59,5 @@ coverage.xml
 *.db
 
 # Конфигурационные файлы
-*.ini
 *.cfg
 *.conf
